@@ -1,11 +1,14 @@
 {
   "name": "react-use-path",
   "version": "0.0.1",
-  "description": "",
+  "description": "The tiniest react router with functional programming.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Zhang Kaiyu (yeannylam@gmail.com)",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^16.8.6"
+  }
 }
