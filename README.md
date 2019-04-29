@@ -1,7 +1,7 @@
 react-use-path
 ==============
 
-The tiniest react router with functional programming.
+The tiniest react router implemented with hooks.
 
 ## Usage
 
