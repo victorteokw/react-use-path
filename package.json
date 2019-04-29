@@ -1,6 +1,6 @@
 {
   "name": "react-use-path",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The tiniest react router with functional programming.",
   "main": "index.js",
   "scripts": {
