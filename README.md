@@ -12,8 +12,8 @@ main app component.
 const [path, setPath] = usePath();
 ```
 
-Let's say, the current url is `http://www.example.com/part1/part2
-?val1=2&val2=5#top`.
+Let's say, the current url is
+`http://www.example.com/part1/part2?val1=2&val2=5#top`.
 The corresponding path values are:
 
 ``` js
