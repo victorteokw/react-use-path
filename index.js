@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from 'react';
+const { useReducer, useEffect } = require('react');
 
 const parseFullpath = (fullpath) => {
   const [restOfHash, hash] = fullpath.split('#');
@@ -82,11 +82,12 @@ const router = (state, action) => {
   }
 };
 
-const useRouter = () => {
+const usePath = () => {
   const [state, dispatch] = useReducer(router, initialState);
   useEffect(...routerUpdateHook(dispatch));
   const setPath = setPathFunc(state, dispatch);
   return [state, setPath];
 };
 
-export default useRouter;
+usePath.default = usePath;
+module.exports = usePath;
