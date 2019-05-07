@@ -6,7 +6,7 @@ const currentFullPath = () => {
   return window.location.href.replace(window.location.origin, '');
 };
 
-describe('Get browser path', () => {
+describe('gets browser path', () => {
 
   let renderer;
   beforeAll(() => {
@@ -48,14 +48,10 @@ describe('Get browser path', () => {
   });
 });
 
-describe('Set full browser path with a string', () => {
+describe('sets browser path', () => {
 
-  beforeAll(() => {
-    history.pushState(
-      {},
-      '',
-      '/'
-    );
+  it('set full browser path with a string', () => {
+    history.pushState({}, '', '/');
     const Element = () => {
       const setPath = usePath()[1];
       return React.createElement('div', {},
@@ -70,22 +66,11 @@ describe('Set full browser path with a string', () => {
     TestRenderer.act(() => {
       renderer.root.findByType('button').props.onClick();
     });
-  });
-
-  it('set full path', () => {
     expect(currentFullPath()).toBe('/newFullPath');
   });
 
-});
-
-describe('Set hash with hash key', () => {
-
-  beforeAll(() => {
-    history.pushState(
-      {},
-      '',
-      '/current?val1=2'
-    );
+  it('set hash with hash key', () => {
+    history.pushState({}, '', '/current?val1=2');
     const Element = () => {
       const setPath = usePath()[1];
       return React.createElement('div', {},
@@ -100,22 +85,11 @@ describe('Set hash with hash key', () => {
     TestRenderer.act(() => {
       renderer.root.findByType('button').props.onClick();
     });
-  });
-
-  it('set hash', () => {
     expect(currentFullPath()).toBe('/current?val1=2#top');
   });
 
-});
-
-describe('Set query with query key', () => {
-
-  beforeAll(() => {
-    history.pushState(
-      {},
-      '',
-      '/current?val1=2'
-    );
+  it('set query with query key', () => {
+    history.pushState({}, '', '/current?val1=2');
     const Element = () => {
       const setPath = usePath()[1];
       return React.createElement('div', {},
@@ -130,22 +104,11 @@ describe('Set query with query key', () => {
     TestRenderer.act(() => {
       renderer.root.findByType('button').props.onClick();
     });
-  });
-
-  it('set query', () => {
     expect(currentFullPath()).toBe('/current?abc=5');
   });
 
-});
-
-describe('Set path with path key', () => {
-
-  beforeAll(() => {
-    history.pushState(
-      {},
-      '',
-      '/current?val1=2'
-    );
+  it('set query with query key', () => {
+    history.pushState({}, '', '/current?val1=2');
     const Element = () => {
       const setPath = usePath()[1];
       return React.createElement('div', {},
@@ -160,10 +123,66 @@ describe('Set path with path key', () => {
     TestRenderer.act(() => {
       renderer.root.findByType('button').props.onClick();
     });
-  });
-
-  it('set path', () => {
     expect(currentFullPath()).toBe('/new');
   });
 
+});
+
+describe('updates state value', () => {
+
+  let renderer, pathValue;
+  beforeAll(() => {
+    history.pushState(
+      {},
+      '',
+      '/component1/component2?query1=a&query2=b#hashvalue'
+    );
+    const Element = () => {
+      const [path, setPath] = usePath();
+      return React.createElement('div', {}, [
+        React.createElement('div', { key: 'div' }, [
+          path.fullpath,
+          path.path,
+          path.query,
+          path.hash
+        ]),
+        React.createElement('button', {
+          key: 'button',
+          onClick: () => setPath(pathValue)
+        }, 'Navigate')
+      ]);
+    };
+    renderer = TestRenderer.create(
+      React.createElement(Element, null, null)
+    );
+    history.pushState({}, '', '/');
+    pathValue = {
+      path: '/abc/def/ghi',
+      query: 'jkl=mno',
+      hash: 'pqr'
+    };
+    TestRenderer.act(() => {
+      renderer.root.findByType('button').props.onClick();
+    });
+  });
+
+  it('updates fullpath', () => {
+    expect(renderer.toJSON().children[0].children[0])
+      .toBe('/abc/def/ghi?jkl=mno#pqr');
+  });
+
+  it('updates path', () => {
+    expect(renderer.toJSON().children[0].children[1])
+      .toBe('/abc/def/ghi');
+  });
+
+  it('updates query', () => {
+    expect(renderer.toJSON().children[0].children[2])
+      .toBe('jkl=mno');
+  });
+
+  it('updates hash', () => {
+    expect(renderer.toJSON().children[0].children[3])
+      .toBe('pqr');
+  });
 });
