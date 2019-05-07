@@ -1,3 +1,8 @@
 {
-  "extends": "man"
+  "extends": "man",
+  "plugins": ["jest"],
+  "env": {
+    "browser": true,
+    "jest/globals": true
+  }
 }
