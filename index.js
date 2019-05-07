@@ -90,4 +90,5 @@ const usePath = () => {
 };
 
 usePath.default = usePath;
+usePath.usePath = usePath;
 module.exports = usePath;

@@ -1,5 +1,12 @@
 react-use-path
 ==============
+[![NPM version][npm-image]][npm-url]
+[![Build Status][travis-image]][travis-url]
+[![Test Coverage][cov-image]][cov-url]
+[![Dependency Status][daviddm-image]][daviddm-url]
+[![DevDependency Status][daviddm-image-dev]][daviddm-url-dev]
+[![License][license-image]][license-url]
+[![PR Welcome][pr-image]][pr-url]
 
 The tiniest react router implemented with hooks.
 
@@ -39,3 +46,22 @@ Install this with `npm`.
 ```bash
 npm i react-use-path -s
 ```
+
+## License
+
+MIT © [Zhang Kai Yu][license-url]
+
+[npm-image]: https://badge.fury.io/js/react-use-path.svg
+[npm-url]: https://npmjs.org/package/react-use-path
+[travis-image]: https://travis-ci.org/zhangkaiyulw/react-use-path.svg?branch=master
+[travis-url]: https://travis-ci.org/zhangkaiyulw/react-use-path
+[cov-image]: https://codecov.io/gh/zhangkaiyulw/react-use-path/branch/master/graph/badge.svg
+[cov-url]: https://codecov.io/gh/zhangkaiyulw/react-use-path
+[daviddm-image]: https://david-dm.org/zhangkaiyulw/react-use-path.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/zhangkaiyulw/react-use-path
+[daviddm-image-dev]: https://david-dm.org/zhangkaiyulw/react-use-path/dev-status.svg
+[daviddm-url-dev]: https://david-dm.org/zhangkaiyulw/react-use-path?type=dev
+[license-image]: https://img.shields.io/github/license/zhangkaiyulw/react-use-path.svg
+[license-url]: https://github.com/zhangkaiyulw/react-use-path/blob/master/LICENSE
+[pr-image]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg
+[pr-url]: https://github.com/zhangkaiyulw/react-use-path/blob/master/CONTRIBUTING.md
