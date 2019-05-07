@@ -21,8 +21,6 @@ const getCurrentState = () => {
   };
 };
 
-const initialState = getCurrentState();
-
 const routerUpdateHook = (dispatch) => [() => {
   const updateRouter = () => {
     dispatch({ type: 'refresh' });
@@ -83,7 +81,7 @@ const router = (state, action) => {
 };
 
 const usePath = () => {
-  const [state, dispatch] = useReducer(router, initialState);
+  const [state, dispatch] = useReducer(router, getCurrentState());
   useEffect(...routerUpdateHook(dispatch));
   const setPath = setPathFunc(state, dispatch);
   return [state, setPath];
