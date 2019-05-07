@@ -10,6 +10,18 @@ react-use-path
 
 The tiniest react router implemented with hooks.
 
+## Why this?
+
+A hook based one line router looks more elegant. 
+
+## Installation
+
+Install this package with `npm`.
+
+```bash
+npm i react-use-path -s
+```
+
 ## Usage
 
 Using this router is just like using a react `setState` hook. Put this in your
@@ -37,14 +49,6 @@ setPath('/foo/bar?baz=true'); // => '/foo/bar?baz=true'
 setPath({ hash: 'bottom' }) // => '/foo/bar?baz=true#bottom'
 setPath({ query: 'baz=false' }) // => '/foo/bar?baz=false'
 setPath({ path: '/another/path' }) // => '/another/path'
-```
-
-## Installation
-
-Install this with `npm`.
-
-```bash
-npm i react-use-path -s
 ```
 
 ## License
