@@ -4,7 +4,7 @@
   "description": "The tiniest react router implemented with hooks.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Zhang Kaiyu (yeannylam@gmail.com)",
   "license": "MIT",
