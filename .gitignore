@@ -1,0 +1,25 @@
+# Error logs
+yarn-error.log
+
+# Package-lock
+package-lock.json
+
+# Dependency directories
+node_modules/
+
+# Compiled ts files
+dist/
+
+# OS X hidden file
+.DS_Store
+
+# ide info
+.vscode/
+.idea/
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
