@@ -2,6 +2,10 @@ const React = require('react');
 const TestRenderer = require('react-test-renderer');
 const usePath = require('./index');
 
+const currentFullPath = () => {
+  return window.location.href.replace(window.location.origin, '');
+};
+
 describe('Get browser path', () => {
 
   let renderer;
@@ -56,10 +60,7 @@ describe('Set full browser path with a string', () => {
       const setPath = usePath()[1];
       return React.createElement('div', {},
         React.createElement('button', {
-          onClick: () => {
-            console.log('clicked');
-            setPath('/newFullPath');
-          }
+          onClick: () => setPath('/newFullPath')
         }, 'Navigate')
       );
     };
@@ -72,7 +73,97 @@ describe('Set full browser path with a string', () => {
   });
 
   it('set full path', () => {
-    expect(window.location.pathname).toBe('/newFullPath');
+    expect(currentFullPath()).toBe('/newFullPath');
+  });
+
+});
+
+describe('Set hash with hash key', () => {
+
+  beforeAll(() => {
+    history.pushState(
+      {},
+      '',
+      '/current?val1=2'
+    );
+    const Element = () => {
+      const setPath = usePath()[1];
+      return React.createElement('div', {},
+        React.createElement('button', {
+          onClick: () => setPath({ hash: 'top' })
+        }, 'Jump to top')
+      );
+    };
+    const renderer = TestRenderer.create(
+      React.createElement(Element, null, null)
+    );
+    TestRenderer.act(() => {
+      renderer.root.findByType('button').props.onClick();
+    });
+  });
+
+  it('set hash', () => {
+    expect(currentFullPath()).toBe('/current?val1=2#top');
+  });
+
+});
+
+describe('Set query with query key', () => {
+
+  beforeAll(() => {
+    history.pushState(
+      {},
+      '',
+      '/current?val1=2'
+    );
+    const Element = () => {
+      const setPath = usePath()[1];
+      return React.createElement('div', {},
+        React.createElement('button', {
+          onClick: () => setPath({ query: 'abc=5' })
+        }, 'Jump to top')
+      );
+    };
+    const renderer = TestRenderer.create(
+      React.createElement(Element, null, null)
+    );
+    TestRenderer.act(() => {
+      renderer.root.findByType('button').props.onClick();
+    });
+  });
+
+  it('set query', () => {
+    expect(currentFullPath()).toBe('/current?abc=5');
+  });
+
+});
+
+describe('Set path with path key', () => {
+
+  beforeAll(() => {
+    history.pushState(
+      {},
+      '',
+      '/current?val1=2'
+    );
+    const Element = () => {
+      const setPath = usePath()[1];
+      return React.createElement('div', {},
+        React.createElement('button', {
+          onClick: () => setPath({ path: 'new' })
+        }, 'Jump to top')
+      );
+    };
+    const renderer = TestRenderer.create(
+      React.createElement(Element, null, null)
+    );
+    TestRenderer.act(() => {
+      renderer.root.findByType('button').props.onClick();
+    });
+  });
+
+  it('set path', () => {
+    expect(currentFullPath()).toBe('/new');
   });
 
 });
