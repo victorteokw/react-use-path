@@ -1,9 +1,6 @@
 # Error logs
 yarn-error.log
 
-# Package-lock
-package-lock.json
-
 # Dependency directories
 node_modules/
 
@@ -22,4 +19,3 @@ dist/
 
 # Optional REPL history
 .node_repl_history
-
