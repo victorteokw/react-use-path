@@ -1,6 +1,6 @@
 {
   "name": "react-use-path",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The tiniest react router implemented with hooks.",
   "main": "index.js",
   "scripts": {
@@ -17,8 +17,8 @@
     "eslint-config-man": "^1.0.4",
     "eslint-plugin-jest": "^22.5.1",
     "jest": "^24.8.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-test-renderer": "^16.8.6"
+    "react": "^16.9.0-alpha.0",
+    "react-dom": "^16.9.0-alpha.0",
+    "react-test-renderer": "^16.9.0-alpha.0"
   }
 }

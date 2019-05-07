@@ -6,6 +6,12 @@ const currentFullPath = () => {
   return window.location.href.replace(window.location.origin, '');
 };
 
+const nextTick = () => {
+  return new Promise(function(resolve) {
+    setTimeout(resolve, 20);
+  });
+};
+
 describe('gets browser path', () => {
 
   let renderer;
@@ -185,4 +191,135 @@ describe('updates state value', () => {
     expect(renderer.toJSON().children[0].children[3])
       .toBe('pqr');
   });
+});
+
+describe('updates history items', () => {
+  it('pushes history item', () => {
+    const { length } = history;
+    const Element = () => {
+      const setPath = usePath()[1];
+      return React.createElement('div', {},
+        React.createElement('button', {
+          onClick: () => setPath('/path')
+        }, 'Navigate')
+      );
+    };
+    const renderer = TestRenderer.create(
+      React.createElement(Element, null, null)
+    );
+    TestRenderer.act(() => {
+      renderer.root.findByType('button').props.onClick();
+    });
+    expect(history.length - length).toBe(1);
+  });
+});
+
+describe('updates on navigation back', () => {
+
+  let renderer;
+  beforeAll(async () => {
+    history.pushState({}, '', '/abc/def/ghi?jkl=mno#pqr');
+    const Element = () => {
+      const [path, setPath] = usePath();
+      return React.createElement('div', {}, [
+        React.createElement('div', { key: 'div' }, [
+          path.fullpath,
+          path.path,
+          path.query,
+          path.hash
+        ]),
+        React.createElement('button', {
+          key: 'button',
+          onClick: () => setPath('/after-push')
+        }, 'Navigate')
+      ]);
+    };
+    renderer = TestRenderer.create(
+      React.createElement(Element, null, null)
+    );
+    TestRenderer.act(() => {
+      renderer.root.findByType('button').props.onClick();
+    });
+    await TestRenderer.act(async () => {
+      history.back();
+      await nextTick();
+    });
+  });
+
+  it('updates fullpath', () => {
+    expect(renderer.toJSON().children[0].children[0])
+      .toBe('/abc/def/ghi?jkl=mno#pqr');
+  });
+
+  it('updates path', () => {
+    expect(renderer.toJSON().children[0].children[1])
+      .toBe('/abc/def/ghi');
+  });
+
+  it('updates query', () => {
+    expect(renderer.toJSON().children[0].children[2])
+      .toBe('jkl=mno');
+  });
+
+  it('updates hash', () => {
+    expect(renderer.toJSON().children[0].children[3])
+      .toBe('pqr');
+  });
+
+});
+
+describe('updates on navigation forward', () => {
+
+  let renderer;
+  beforeAll(async () => {
+    history.pushState({}, '', '/abc/def/ghi?jkl=mno#pqr');
+    const Element = () => {
+      const [path, setPath] = usePath();
+      return React.createElement('div', {}, [
+        React.createElement('div', { key: 'div' }, [
+          path.fullpath,
+          path.path,
+          path.query,
+          path.hash
+        ]),
+        React.createElement('button', {
+          key: 'button',
+          onClick: () => setPath('/after-push')
+        }, 'Navigate')
+      ]);
+    };
+    renderer = TestRenderer.create(
+      React.createElement(Element, null, null)
+    );
+    TestRenderer.act(() => {
+      renderer.root.findByType('button').props.onClick();
+    });
+    await TestRenderer.act(async () => {
+      history.back();
+      await nextTick();
+      history.forward();
+      await nextTick();
+    });
+  });
+
+  it('updates fullpath', () => {
+    expect(renderer.toJSON().children[0].children[0])
+      .toBe('/after-push');
+  });
+
+  it('updates path', () => {
+    expect(renderer.toJSON().children[0].children[1])
+      .toBe('/after-push');
+  });
+
+  it('updates query', () => {
+    expect(renderer.toJSON().children[0].children[2])
+      .toBe('');
+  });
+
+  it('updates hash', () => {
+    expect(renderer.toJSON().children[0].children[3])
+      .toBe('');
+  });
+
 });

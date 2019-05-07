@@ -23,7 +23,7 @@ const getCurrentState = () => {
 
 const routerUpdateHook = (dispatch) => [() => {
   const updateRouter = () => {
-    dispatch({ type: 'refresh' });
+    dispatch({ type: 'setup' });
   };
   window.addEventListener('popstate', updateRouter);
 }, []];
@@ -62,17 +62,21 @@ const router = (state, action) => {
   switch (action.type) {
     case 'push': {
       history.pushState(
-        {},
+        null,
         document.title,
         action.params.fullpath
       );
       return Object.assign({}, state, getCurrentState());
     }
-    case 'pop': {
-      history.popState();
+    case 'replace': {
+      history.replaceState(
+        null,
+        document.title,
+        action.params.fullpath
+      );
       return Object.assign({}, state, getCurrentState());
     }
-    case 'refresh': {
+    case 'setup': {
       return Object.assign({}, state, getCurrentState());
     }
     default:
