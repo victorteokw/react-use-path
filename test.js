@@ -1,8 +1,8 @@
 const React = require('react');
 const TestRenderer = require('react-test-renderer');
-const usePath = require('../index');
+const usePath = require('./index');
 
-describe('Get current path', () => {
+describe('Get browser path', () => {
 
   let renderer;
   beforeAll(() => {
@@ -42,4 +42,37 @@ describe('Get current path', () => {
       '/component1/component2?query1=a&query2=b#hashvalue'
     );
   });
+});
+
+describe('Set full browser path with a string', () => {
+
+  beforeAll(() => {
+    history.pushState(
+      {},
+      '',
+      '/'
+    );
+    const Element = () => {
+      const setPath = usePath()[1];
+      return React.createElement('div', {},
+        React.createElement('button', {
+          onClick: () => {
+            console.log('clicked');
+            setPath('/newFullPath');
+          }
+        }, 'Navigate')
+      );
+    };
+    const renderer = TestRenderer.create(
+      React.createElement(Element, null, null)
+    );
+    TestRenderer.act(() => {
+      renderer.root.findByType('button').props.onClick();
+    });
+  });
+
+  it('set full path', () => {
+    expect(window.location.pathname).toBe('/newFullPath');
+  });
+
 });
