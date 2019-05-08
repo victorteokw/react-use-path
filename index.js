@@ -82,7 +82,7 @@ const router = (state, action) => {
     case 'setup': {
       return Object.assign({}, state, getCurrentState());
     }
-    default:
+    default: /* istanbul ignore next */
       throw new Error(`Unknown action '${action.type}'.`);
   }
 };
