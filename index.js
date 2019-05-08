@@ -26,6 +26,9 @@ const routerUpdateHook = (dispatch) => [() => {
     dispatch({ type: 'setup' });
   };
   window.addEventListener('popstate', updateRouter);
+  return () => {
+    window.removeEventListener('popstate', updateRouter);
+  };
 }, []];
 
 const setPathFunc = (state, dispatch, action) => (params) => {
