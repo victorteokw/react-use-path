@@ -23,7 +23,7 @@ const getCurrentState = () => {
 
 const routerUpdateHook = (dispatch) => [() => {
   const updateRouter = () => {
-    dispatch({ type: 'setup' });
+    dispatch({ type: 'sync' });
   };
   window.addEventListener('popstate', updateRouter);
   return () => {
@@ -79,7 +79,7 @@ const router = (state, action) => {
       );
       return Object.assign({}, state, getCurrentState());
     }
-    case 'setup': {
+    case 'sync': {
       return Object.assign({}, state, getCurrentState());
     }
     default: /* istanbul ignore next */
