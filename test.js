@@ -6,9 +6,9 @@ const currentFullPath = () => {
   return window.location.href.replace(window.location.origin, '');
 };
 
-const nextTick = () => {
+const nextTick = (n = 20) => {
   return new Promise(function(resolve) {
-    setTimeout(resolve, 20);
+    setTimeout(resolve, n);
   });
 };
 
@@ -364,5 +364,23 @@ describe('replaces browser path', () => {
     });
     expect(currentFullPath()).toBe('/newFullPath');
     expect(history.length).toBe(length);
+  });
+});
+
+describe('removes callback on unamouting', () => {
+  it('remove event handler on window object', async () => {
+    history.pushState({}, '', '/');
+    const Element = () => {
+      const path = usePath()[0];
+      return React.createElement('div', {}, path.fullpath);
+    };
+    const renderer = TestRenderer.create(
+      React.createElement(Element, null, null)
+    );
+    renderer.unmount();
+    await expect(TestRenderer.act(async () => {
+      history.back();
+      await nextTick(9000);
+    })).rejects.not.toThrow();
   });
 });
