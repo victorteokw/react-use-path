@@ -28,11 +28,11 @@ const routerUpdateHook = (dispatch) => [() => {
   window.addEventListener('popstate', updateRouter);
 }, []];
 
-const setPathFunc = (state, dispatch) => (params) => {
+const setPathFunc = (state, dispatch, action) => (params) => {
   if (params.fullpath || (typeof params === 'string')) {
     const fullpath = params.fullpath || params;
     const [path, query, hash] = parseFullpath(fullpath);
-    dispatch({ type: 'push', params: { path, query, hash, fullpath }});
+    dispatch({ type: action, params: { path, query, hash, fullpath }});
   } else {
     params = Object.assign({}, params);
     // reset following url components
@@ -87,8 +87,9 @@ const router = (state, action) => {
 const usePath = () => {
   const [state, dispatch] = useReducer(router, getCurrentState());
   useEffect(...routerUpdateHook(dispatch));
-  const setPath = setPathFunc(state, dispatch);
-  return [state, setPath];
+  const setPath = setPathFunc(state, dispatch, 'push');
+  const replacePath = setPathFunc(state, dispatch, 'replace');
+  return [state, setPath, replacePath];
 };
 
 usePath.default = usePath;

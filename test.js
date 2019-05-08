@@ -323,3 +323,27 @@ describe('updates on navigation forward', () => {
   });
 
 });
+
+describe('replaces browser path', () => {
+  it('replaces full browser path with a string', () => {
+    history.pushState({}, '', '/');
+    const Element = () => {
+      const replacePath = usePath()[2];
+      return React.createElement('div', {},
+        React.createElement('button', {
+          onClick: () => replacePath('/newFullPath')
+        }, 'Navigate')
+      );
+    };
+    const renderer = TestRenderer.create(
+      React.createElement(Element, null, null)
+    );
+    expect(currentFullPath()).toBe('/');
+    const { length } = history;
+    TestRenderer.act(() => {
+      renderer.root.findByType('button').props.onClick();
+    });
+    expect(currentFullPath()).toBe('/newFullPath');
+    expect(history.length).toBe(length);
+  });
+});
