@@ -132,6 +132,25 @@ describe('sets browser path', () => {
     expect(currentFullPath()).toBe('/new');
   });
 
+  it('does nothing when received empty object', () => {
+    history.pushState({}, '', '/current?val1=2#abc');
+    const Element = () => {
+      const setPath = usePath()[1];
+      return React.createElement('div', {},
+        React.createElement('button', {
+          onClick: () => setPath({})
+        }, 'Jump to top')
+      );
+    };
+    const renderer = TestRenderer.create(
+      React.createElement(Element, null, null)
+    );
+    TestRenderer.act(() => {
+      renderer.root.findByType('button').props.onClick();
+    });
+    expect(currentFullPath()).toBe('/current?val1=2#abc');
+  });
+
 });
 
 describe('updates state value', () => {
