@@ -113,7 +113,7 @@ describe('sets browser path', () => {
     expect(currentFullPath()).toBe('/current?abc=5');
   });
 
-  it('set query with query key', () => {
+  it('set path with path key', () => {
     history.pushState({}, '', '/current?val1=2');
     const Element = () => {
       const setPath = usePath()[1];

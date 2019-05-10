@@ -1,12 +1,16 @@
-const { useReducer, useEffect } = require('react');
+const { useState, useEffect } = require('react');
 
-const parseFullpath = (fullpath) => {
+const parseFullPath = (fullpath) => {
   const [restOfHash, hash] = fullpath.split('#');
   const [path, query] = restOfHash.split('?');
-  return [path || '', query || '', hash || ''];
+  return {
+    path: path || '',
+    query: query || '',
+    hash: hash || ''
+  };
 };
 
-const buildFullpath = (path, query, hash) => {
+const buildFullPath = (path, query, hash) => {
   if (query) path += `?${query}`;
   if (hash) path += `#${hash}`;
   return path;
@@ -21,77 +25,77 @@ const getCurrentState = () => {
   };
 };
 
-const routerUpdateHook = (dispatch) => [() => {
-  const updateRouter = () => {
-    dispatch({ type: 'sync' });
-  };
-  window.addEventListener('popstate', updateRouter);
-  return () => {
-    window.removeEventListener('popstate', updateRouter);
-  };
-}, []];
+const savedSetStates = [];
 
-const setPathFunc = (state, dispatch, action) => (params) => {
-  if (params.fullpath || (typeof params === 'string')) {
-    const fullpath = params.fullpath || params;
-    const [path, query, hash] = parseFullpath(fullpath);
-    dispatch({ type: action, params: { path, query, hash, fullpath }});
-  } else {
-    params = Object.assign({}, params);
-    // reset following url components
-    if (params.path) {
-      params.query || (params.query = '');
-      params.hash || (params.hash = '');
-    }
-    if (params.query) {
-      params.hash || (params.hash = '');
-    }
-    // Filling the unspecified params
-    if (params.hash === undefined || params.hash === null) {
-      params.hash = state.hash;
-    }
-    if (params.query === undefined || params.query === null) {
-      params.query = state.query;
-    }
-    if (params.path === undefined || params.path === null) {
-      params.path = state.path;
-    }
-    const fullpath = buildFullpath(params.path, params.query, params.hash);
-    dispatch({ type: 'push', params: { ...params, fullpath }});
+const syncState = (state = getCurrentState()) => {
+  for (const setState of savedSetStates) {
+    setState(state);
   }
 };
 
-const router = (state, action) => {
-  switch (action.type) {
-    case 'push': {
-      history.pushState(
-        null,
-        document.title,
-        action.params.fullpath
-      );
-      return Object.assign({}, state, getCurrentState());
+const onPopSyncState = () => {
+  syncState();
+};
+
+const setPath = (newPath, noRecord = false) => {
+  if (newPath.fullpath || (typeof newPath === 'string')) {
+    const fullpath = newPath.fullpath || newPath;
+    if (noRecord) {
+      history.replaceState(null, document.title, fullpath);
+    } else {
+      history.pushState(null, document.title, fullpath);
     }
-    case 'replace': {
-      history.replaceState(
-        null,
-        document.title,
-        action.params.fullpath
-      );
-      return Object.assign({}, state, getCurrentState());
+    syncState({ fullpath, ...parseFullPath(fullpath) });
+  } else {
+    newPath = Object.assign({}, newPath);
+    // reset following url components
+    if (newPath.path) {
+      newPath.query || (newPath.query = '');
+      newPath.hash || (newPath.hash = '');
     }
-    case 'sync': {
-      return Object.assign({}, state, getCurrentState());
+    if (newPath.query) {
+      newPath.hash || (newPath.hash = '');
     }
-    default: /* istanbul ignore next */
-      throw new Error(`Unknown action '${action.type}'.`);
+    // Filling the unspecified newPath
+    const state = getCurrentState();
+    if (newPath.hash === undefined || newPath.hash === null) {
+      newPath.hash = state.hash;
+    }
+    if (newPath.query === undefined || newPath.query === null) {
+      newPath.query = state.query;
+    }
+    if (newPath.path === undefined || newPath.path === null) {
+      newPath.path = state.path;
+    }
+    const fullpath = buildFullPath(newPath.path, newPath.query, newPath.hash);
+    if (noRecord) {
+      history.replaceState(null, document.title, fullpath);
+    } else {
+      history.pushState(null, document.title, fullpath);
+    }
+    syncState({ ...newPath, fullpath });
   }
+};
+
+const replacePath = (newPath) => {
+  return setPath(newPath, true);
 };
 
 const usePath = () => {
-  const [state, dispatch] = useReducer(router, getCurrentState());
-  useEffect(...routerUpdateHook(dispatch));
-  const setPath = setPathFunc(state, dispatch, 'push');
-  const replacePath = setPathFunc(state, dispatch, 'replace');
+  const [state, setState] = useState(getCurrentState());
+  useEffect(() => {
+    savedSetStates.push(setState);
+    if (savedSetStates.length === 1) {
+      window.addEventListener('popstate', onPopSyncState);
+    }
+    return () => {
+      savedSetStates.splice(savedSetStates.indexOf(setState), 1);
+      if (savedSetStates.length === 0) {
+        window.removeEventListener('popstate', onPopSyncState);
+      }
+    };
+  }, []);
+
   return [state, setPath, replacePath];
 };
 
