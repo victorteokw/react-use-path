@@ -3,11 +3,11 @@
         "baseUrl": ".",
         "outDir": "./dist.browser",
         "target": "es2019",
-        "module": "es6",
+        "module": "commonjs",
         "moduleResolution": "node",
-        "lib": ["es2019", "dom"]
+        "lib": ["es2019", "dom"],
+        "esModuleInterop": true
     },
-    "include": [
-        "./index.ts"
-    ]
+    "include": ["./index.ts"],
+    "exclude": ["node_modules"]
 }
