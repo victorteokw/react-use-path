@@ -9,6 +9,11 @@ interface Path {
 
 type PathSetter = string | Partial<Path>
 
+interface SetPath {
+    (newPath: PathSetter, noRecord: boolean): void
+    (newPath: PathSetter): void
+}
+
 const parsePath = (path: string): Path => {
     const [stringBeforeHash, hash] = path.split('#');
     const [pathname, query] = stringBeforeHash.split('?');
@@ -92,7 +97,7 @@ const replacePath = (newPath: PathSetter) => {
     return setPath(newPath, true);
 };
 
-export const usePath = () => {
+export const usePath = (): [Path, SetPath, SetPath] => {
     const [state, setState] = useState(getCurrentState());
     useEffect(() => {
         savedSetStates.push(setState);
