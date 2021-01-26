@@ -1,6 +1,6 @@
 {
     "name": "react-use-path",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "description": "The tiniest react router implemented with hooks.",
     "main": "index.js",
     "files": [
