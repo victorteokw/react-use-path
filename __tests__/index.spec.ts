@@ -1,6 +1,6 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer';
-import { usePath } from '../index';
+import { usePath } from '../src/index';
 
 const currentPath = (): string => {
     return window.location.href.replace(window.location.origin, '');

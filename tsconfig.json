@@ -1,13 +1,14 @@
 {
     "compilerOptions": {
         "baseUrl": ".",
-        "outDir": "./dist.browser",
+        "outDir": "./lib",
         "target": "es2019",
+        "declaration": true,
         "module": "commonjs",
         "moduleResolution": "node",
         "lib": ["es2019", "dom"],
         "esModuleInterop": true
     },
-    "include": ["./index.ts"],
-    "exclude": ["node_modules"]
+    "include": ["src"],
+    "exclude": ["node_modules", "**/__tests__/*"]
 }

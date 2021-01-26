@@ -9,7 +9,8 @@
     ],
     "scripts": {
         "test": "jest",
-        "test-cov": "jest --coverage"
+        "test-cov": "jest --coverage",
+        "build": "tsc"
     },
     "author": "Zhang Kaiyu (yeannylam@gmail.com)",
     "license": "MIT",
