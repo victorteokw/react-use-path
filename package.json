@@ -4,8 +4,8 @@
     "description": "The tiniest react router implemented with hooks.",
     "main": "index.js",
     "files": [
-        "index.js",
-        "index.d.ts"
+        "lib/index.js",
+        "lib/index.d.ts"
     ],
     "scripts": {
         "test": "jest",
