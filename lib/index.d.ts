@@ -9,5 +9,5 @@ interface SetPath {
     (newPath: PathSetter, noRecord: boolean): void;
     (newPath: PathSetter): void;
 }
-export declare const usePath: () => [Path, SetPath, SetPath];
-export {};
+declare const usePath: () => [Path, SetPath, SetPath];
+export default usePath;

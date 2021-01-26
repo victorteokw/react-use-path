@@ -97,7 +97,7 @@ const replacePath = (newPath: PathSetter) => {
     return setPath(newPath, true);
 };
 
-export const usePath = (): [Path, SetPath, SetPath] => {
+const usePath = (): [Path, SetPath, SetPath] => {
     const [state, setState] = useState(getCurrentState());
     useEffect(() => {
         savedSetStates.push(setState);
@@ -114,3 +114,5 @@ export const usePath = (): [Path, SetPath, SetPath] => {
 
     return [state, setPath, replacePath];
 };
+
+export default usePath;
