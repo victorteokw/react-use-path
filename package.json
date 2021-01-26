@@ -1,28 +1,32 @@
 {
-  "name": "react-use-path",
-  "version": "0.1.7",
-  "description": "The tiniest react router implemented with hooks.",
-  "main": "index.js",
-  "files": [
-    "index.js",
-    "index.d.ts"
-  ],
-  "scripts": {
-    "test": "jest",
-    "test-cov": "jest --coverage"
-  },
-  "author": "Zhang Kaiyu (yeannylam@gmail.com)",
-  "license": "MIT",
-  "peerDependencies": {
-    "react": "^16.8.0"
-  },
-  "devDependencies": {
-    "eslint": "^5.16.0",
-    "eslint-config-man": "^1.0.4",
-    "eslint-plugin-jest": "^22.5.1",
-    "jest": "^24.8.0",
-    "react": "^16.9.0-alpha.0",
-    "react-dom": "^16.9.0-alpha.0",
-    "react-test-renderer": "^16.9.0-alpha.0"
+    "name": "react-use-path",
+    "version": "0.2.0",
+    "description": "The tiniest react router implemented with hooks.",
+    "main": "index.js",
+    "files": [
+      "index.js",
+      "index.d.ts"
+    ],
+    "scripts": {
+        "test": "jest",
+        "test-cov": "jest --coverage"
+    },
+    "author": "Zhang Kaiyu (yeannylam@gmail.com)",
+    "license": "MIT",
+    "peerDependencies": {
+        "react": "^17.0.0"
+    },
+    "devDependencies": {
+        "@types/react": "^17.0.0",
+        "@types/react-dom": "^17.0.0",
+        "eslint": "^5.16.0",
+        "eslint-config-man": "^1.0.4",
+        "eslint-plugin-jest": "^22.5.1",
+        "jest": "^24.8.0",
+        "react": "^17.0.0",
+        "react-dom": "^17.0.0",
+        "react-test-renderer": "^17.0.0",
+        "tslint": "^6.1.3",
+        "typescript": "^4.1.3"
+    }
   }
-}
