@@ -54,13 +54,14 @@ const onPopSyncState = () => {
 
 const setPath = (newPath: PathSetter, noRecord = false) => {
     if (newPath['path'] || (typeof newPath === 'string')) {
-        const fullpath = String(newPath['path'] || newPath);
+        const path = String(newPath['path'] || newPath);
         if (noRecord) {
-            history.replaceState(null, document.title, fullpath);
+            history.replaceState(null, document.title, path);
         } else {
-            history.pushState(null, document.title, fullpath);
+            history.pushState(null, document.title, path);
         }
-        syncState({ path: fullpath, ...parsePath(fullpath) });
+        const currentPath = window.location.href.replace(window.location.origin, '');
+        syncState({ path: currentPath, ...parsePath(currentPath) });
     } else {
         newPath = Object.assign({}, newPath);
         // reset following url components
