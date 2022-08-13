@@ -1,6 +1,6 @@
 {
     "name": "react-use-path",
-    "version": "0.2.4",
+    "version": "0.3.0",
     "description": "The tiniest react router implemented with hooks.",
     "main": "index.js",
     "files": [
@@ -17,7 +17,7 @@
     "author": "Zhang Kaiyu (yeannylam@gmail.com)",
     "license": "MIT",
     "peerDependencies": {
-        "react": "^17.0.0"
+        "react": "^18.0.0"
     },
     "devDependencies": {
         "@types/jest": "^26.0.20",
