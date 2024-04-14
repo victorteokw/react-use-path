@@ -4,10 +4,10 @@ interface Path {
     hash: string;
     path: string;
 }
-declare type PathSetter = string | Partial<Path>;
+type PathValue = string | Partial<Path>;
 interface SetPath {
-    (newPath: PathSetter, noRecord: boolean): void;
-    (newPath: PathSetter): void;
+    (newPath: PathValue, noRecord: boolean): void;
+    (newPath: PathValue): void;
 }
 declare const usePath: () => [Path, SetPath, SetPath];
 export default usePath;

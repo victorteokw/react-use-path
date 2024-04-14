@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 
 interface Path {
     pathname: string
@@ -7,16 +7,16 @@ interface Path {
     path: string
 }
 
-type PathSetter = string | Partial<Path>
+type PathValue = string | Partial<Path>
 
 interface SetPath {
-    (newPath: PathSetter, noRecord: boolean): void
-    (newPath: PathSetter): void
+    (newPath: PathValue, noRecord: boolean): void
+    (newPath: PathValue): void
 }
 
 const parsePath = (path: string): Path => {
-    const [stringBeforeHash, hash] = path.split('#');
-    const [pathname, query] = stringBeforeHash.split('?');
+    const [stringBeforeHash, hash] = path.split('#')
+    const [pathname, query] = stringBeforeHash.split('?')
     return {
         pathname: pathname || '',
         query: query || '',
@@ -26,9 +26,9 @@ const parsePath = (path: string): Path => {
 };
 
 const buildPath = (path: string, query: string | undefined = undefined, hash: string | undefined = undefined): string => {
-    if (query) path += `?${query}`;
-    if (hash) path += `#${hash}`;
-    return path;
+    if (query) path += `?${query}`
+    if (hash) path += `#${hash}`
+    return path
 };
 
 const getCurrentState = (): Path => {
@@ -37,83 +37,83 @@ const getCurrentState = (): Path => {
         query: window.location.search.slice(1),
         hash: window.location.hash.slice(1),
         path: window.location.href.replace(window.location.origin, '')
-    };
-};
-
-const savedSetStates = [];
-
-const syncState = (state: PathSetter = getCurrentState()) => {
-    for (const setState of savedSetStates) {
-        setState(state);
     }
-};
+}
+
+const savedSetStates = []
+
+const syncState = (state: PathValue = getCurrentState()) => {
+    for (const setState of savedSetStates) {
+        setState(state)
+    }
+}
 
 const onPopSyncState = () => {
-    syncState();
-};
+    syncState()
+}
 
-const setPath = (newPath: PathSetter, noRecord = false) => {
+const setPath = (newPath: PathValue, noRecord = false) => {
     if (newPath['path'] || (typeof newPath === 'string')) {
-        const path = String(newPath['path'] || newPath);
+        const path = String(newPath['path'] || newPath)
         if (noRecord) {
-            history.replaceState(null, document.title, path);
+            history.replaceState(null, document.title, path)
         } else {
-            history.pushState(null, document.title, path);
+            history.pushState(null, document.title, path)
         }
-        const currentPath = window.location.href.replace(window.location.origin, '');
-        syncState({ path: currentPath, ...parsePath(currentPath) });
+        const currentPath = window.location.href.replace(window.location.origin, '')
+        syncState({ path: currentPath, ...parsePath(currentPath) })
     } else {
-        newPath = Object.assign({}, newPath);
+        newPath = Object.assign({}, newPath)
         // reset following url components
         if (newPath.path) {
-            newPath.query || (newPath.query = '');
-            newPath.hash || (newPath.hash = '');
+            newPath.query || (newPath.query = '')
+            newPath.hash || (newPath.hash = '')
         }
         if (newPath.query) {
-            newPath.hash || (newPath.hash = '');
+            newPath.hash || (newPath.hash = '')
         }
         // Filling the unspecified newPath
-        const state = getCurrentState();
+        const state = getCurrentState()
         if (newPath.hash === undefined || newPath.hash === null) {
-            newPath.hash = state.hash;
+            newPath.hash = state.hash
         }
         if (newPath.query === undefined || newPath.query === null) {
-            newPath.query = state.query;
+            newPath.query = state.query
         }
         if (newPath.path === undefined || newPath.path === null) {
-            newPath.path = state.path;
+            newPath.path = state.path
         }
-        const fullpath = buildPath(newPath.path, newPath.query, newPath.hash);
+        const fullpath = buildPath(newPath.path, newPath.query, newPath.hash)
         if (noRecord) {
-            history.replaceState(null, document.title, fullpath);
+            history.replaceState(null, document.title, fullpath)
         } else {
-            history.pushState(null, document.title, fullpath);
+            history.pushState(null, document.title, fullpath)
         }
-        const calculatedState = { ...newPath, path: fullpath };
-        syncState(calculatedState);
+        const calculatedState = { ...newPath, path: fullpath }
+        syncState(calculatedState)
     }
 };
 
-const replacePath = (newPath: PathSetter) => {
-    return setPath(newPath, true);
-};
+const replacePath = (newPath: PathValue) => {
+    return setPath(newPath, true)
+}
 
 const usePath = (): [Path, SetPath, SetPath] => {
-    const [state, setState] = useState(getCurrentState());
+    const [state, setState] = useState(getCurrentState())
     useEffect(() => {
-        savedSetStates.push(setState);
+        savedSetStates.push(setState)
         if (savedSetStates.length === 1) {
-            window.addEventListener('popstate', onPopSyncState);
+            window.addEventListener('popstate', onPopSyncState)
         }
         return () => {
-            savedSetStates.splice(savedSetStates.indexOf(setState), 1);
+            savedSetStates.splice(savedSetStates.indexOf(setState), 1)
             if (savedSetStates.length === 0) {
-                window.removeEventListener('popstate', onPopSyncState);
+                window.removeEventListener('popstate', onPopSyncState)
             }
-        };
-    }, []);
+        }
+    }, [])
 
-    return [state, setPath, replacePath];
+    return [state, setPath, replacePath]
 };
 
-export default usePath;
+export default usePath
