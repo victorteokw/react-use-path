@@ -1,16 +1,16 @@
 import React from 'react'
-import TestRenderer from 'react-test-renderer';
-import { usePath } from '../src/index';
+import TestRenderer from 'react-test-renderer'
+import usePath from '../src/index'
 
 const currentPath = (): string => {
-    return window.location.href.replace(window.location.origin, '');
+    return window.location.href.replace(window.location.origin, '')
 };
 
 const nextTick = (n = 20) => {
     return new Promise(function(resolve) {
-        setTimeout(resolve, n);
-    });
-};
+        setTimeout(resolve, n)
+    })
+}
 
 describe('gets browser path', () => {
 
