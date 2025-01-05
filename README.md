@@ -35,137 +35,30 @@ Install this package with `npm`.
 npm i react-use-path -s
 ```
 
-## Setup
+## Usage
 
-Use javaScript language level switch.
+Get current path information.
 
-```JSX
-import React from 'react';
-import usePath from 'react-use-path';
+```ts
+const [path, setPath] = usePath()
 
-const App = () = {
-  const [path, setPath] = usePath();
-  switch (path.path) {
-    case '/':
-      return <HomePage />;
-    case '/products':
-      return <ProductListPage />;
-    case '/profile':
-      return <UserPage />;
-    default:
-      return <PageNotFound />;
-  }
-}
+const full = path.full // get the full path
+const pathname = path.pathname // get the pathname component
+const search = path.search // get the search component
+const hash = path.hash // get the hash component
 ```
 
-Use your own switch. You should find a package that implements these
-components or implement your own.
+Navigate to next path.
 
-```JSX
-import React from 'react';
-import usePath from 'react-use-path';
+```ts
+const [path, setPath] = usePath()
 
-const App = () = {
-  const [path, setPath] = usePath();
-  return <Switch value={path.path}>
-    <Case value='/'>
-      <HomePage />
-    </Case>
-    <Case value='/products'>
-      <ProductsPage />
-    </Case>
-    <Case value='/profile'>
-      <UserPage />
-    </Case>
-    </Default>
-      <PageNotFound />
-    </Default>
-  </Switch>;
-}
-```
-
-Use your own router component. You should find a package that implements these
-components or write your own.
-
-```JSX
-import React from 'react';
-import usePath from 'react-use-path';
-
-const App = () = {
-  const [path, setPath] = usePath();
-  return <Router location={path.fullpath} setLocation={setPath}>
-    <Route match='/'>
-      <HomePage />
-    </Route>
-    <Route match='/products'>
-      <ProductsPage />
-    </Route>
-    <Route match='/products/:id'>
-      <ProductPage />
-    </Route>
-    <Route match='/profile'>
-      <UserPage />
-    </Route>
-    </Route match='*'>
-      <PageNotFound />
-    </Route>
-  </Router>;
-}
-```
-
-Redirection is just a line of code.
-
-```JSX
-import React from 'react';
-import usePath from 'react-use-path';
-
-const App = () = {
-  const currentUser = useUser();
-  const [path, setPath] = usePath();
-  if (!currentUser) {
-    return setPath('/sign-in');
-  }
-  return <div>...</div>;
-}
-```
-
-## API
-
-### path
-
-`path` is an object which contains 4 values. Let's say, the current url is
-`http://www.example.com/part1/part2?val1=2&val2=5#top`. The path value is:
-```json
-{
-  "path": "/part1/part2;",
-  "query": "val1=2&val2=5",
-  "hash": "top",
-  "fullpath": "/part1/part2?val1=2&val2=5#top"
-}
-```
-
-### setPath
-
-* setPath(path: string)
-
-Set new path value with a full path string.
-
-```js
-setPath('/foo/bar?baz=true'); // => '/foo/bar?baz=true'
-```
-
-* setPath(path: object)
-
-Set new path component with an object.
-
-```js
-setPath({ hash: 'bottom' }) // => '/foo/bar?baz=true#bottom'
-setPath({ query: 'baz=false' }) // => '/foo/bar?baz=false'
-setPath({ path: '/another/path' }) // => '/another/path'
-setPath({
-  path: '/user',
-  query: 'hidePassword=true'
-}) // => '/user?hidePassword=true'
+setPath('/full-new-path') // alter entirely
+setPath({ full: '/full-new-path' }) // save as above
+setPath({ pathname: '/new-path' }) // alter pathname, keeps search and hash
+setPath({ search: 'a=b' }) // alter search, keeps pathname and hash
+setPath({ hash: null }) // remove hash, keeps pathname and search
+setPath('/', { replace: true }) // do not update history state
 ```
 
 ## License
