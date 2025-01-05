@@ -1,12 +1,12 @@
 {
   "name": "react-use-path",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The tiniest react URL path navigator.",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "lib/index.js",
-    "lib/index.d.ts",
+    "dist/index.js",
+    "dist/index.d.ts",
     "README.md",
     "LICENSE"
   ],
@@ -20,27 +20,25 @@
     "prepublish": "tsc",
     "pretest": "tsc",
     "pretest-cov": "tsc",
-    "test": "ava",
-    "test-cov": "nyc --include lib/index.js --reporter=lcov --reporter=text ava"
+    "test": "jest",
+    "test-cov": "jest --coverage"
   },
   "dependencies": {
     "react": ">= 16.8.1"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.26.3",
+    "@babel/preset-typescript": "^7.26.0",
+    "@jest/globals": "^29.7.0",
     "@testing-library/react": "^16.1.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "ava": "^6.2.0",
     "global-jsdom": "^25.0.0",
     "jsdom": "^25.0.1",
-    "nyc": "^17.1.0",
     "react": "^19",
     "react-dom": "^19",
+    "ts-jest": "^29.2.5",
     "typescript": "^5"
-  },
-  "ava": {
-    "files": [
-      "lib/test.js"
-    ]
   }
 }
