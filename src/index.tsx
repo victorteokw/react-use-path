@@ -8,8 +8,8 @@ import React, {
 
 export type PathComponents = {
   pathname: string
-  search: string
-  hash: string
+  search: string | null
+  hash: string | null
 }
 
 export type Path = {
@@ -18,9 +18,9 @@ export type Path = {
 
 export type PathArgument = string |
   { full: string } |
-  { pathname: string, search?: string, hash?: string } |
-  { search: string, hash?: string } |
-  { hash: string }
+  { pathname: string, search?: string | null, hash?: string | null } |
+  { search: string | null, hash?: string | null } |
+  { hash: string | null }
 
 export type SetPathOptions = {
   replace: boolean
@@ -77,13 +77,13 @@ const buildPath = ({ pathname, search, hash }: PathComponents): string => {
   if (search) path += `?${search}`
   if (hash) path += `#${hash}`
   return path
-};
+}
 
 const getCurrentPathState = (): Path => {
   return {
     pathname: window.location.pathname,
-    search: window.location.search.slice(1),
-    hash: window.location.hash.slice(1),
+    search: window.location.search.slice(1) || null,
+    hash: window.location.hash.slice(1) || null,
     full: window.location.href.replace(window.location.origin, '')
   }
 }

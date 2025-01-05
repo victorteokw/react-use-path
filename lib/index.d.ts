@@ -1,8 +1,8 @@
 import React, { type ReactNode } from 'react';
 export type PathComponents = {
     pathname: string;
-    search: string;
-    hash: string;
+    search: string | null;
+    hash: string | null;
 };
 export type Path = {
     full: string;
@@ -11,13 +11,13 @@ export type PathArgument = string | {
     full: string;
 } | {
     pathname: string;
-    search?: string;
-    hash?: string;
+    search?: string | null;
+    hash?: string | null;
 } | {
-    search: string;
-    hash?: string;
+    search: string | null;
+    hash?: string | null;
 } | {
-    hash: string;
+    hash: string | null;
 };
 export type SetPathOptions = {
     replace: boolean;
