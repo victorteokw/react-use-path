@@ -1,4 +1,4 @@
-import React, { type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 export type PathComponents = {
     pathname: string;
     search: string | null;
@@ -28,5 +28,6 @@ export type SetPath = {
 export type PathProviderProps<T extends ReactNode> = {
     children: T;
 };
-export declare function PathProvider<T extends ReactNode>({ children }: PathProviderProps<T>): React.JSX.Element;
+export declare function PathProvider<T extends ReactNode>({ children }: PathProviderProps<T>): import("react/jsx-runtime").JSX.Element;
 export declare const usePath: () => [Path, SetPath];
+//# sourceMappingURL=index.d.ts.map

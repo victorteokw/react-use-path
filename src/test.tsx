@@ -1,5 +1,5 @@
 import "global-jsdom/register"
-import React from 'react'
+import { createElement, useState } from 'react'
 import test from 'ava'
 import { render } from '@testing-library/react'
 import { PathProvider, usePath } from '.'
@@ -420,4 +420,25 @@ test.serial("doesn't update history when replace option is true", (t) => {
   const container = render(layout).container
   container.querySelector("button")?.click()
   t.is(history.length - length, 0)
+})
+
+test.serial("pop history callback is removed on unmount", async (t) => {
+  const Component = () => {
+    const path = usePath()[0]
+    return (
+      <div data-data={path.full} />
+    )
+  }
+  const Layout = () => {
+    const [show, setShow] = useState(true)
+    return <div>
+      {show ? <PathProvider><Component /></PathProvider> : null}
+      <button onClick={() => setShow(false)}></button>
+    </div>
+  }
+  const layout = createElement(Layout)
+  const container = render(layout).container
+  container.querySelector("button")?.click()
+  await wait()
+  t.notThrows(() => {})
 })

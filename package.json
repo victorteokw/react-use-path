@@ -21,7 +21,7 @@
     "pretest": "tsc",
     "pretest-cov": "tsc",
     "test": "ava",
-    "test-cov": "nyc ava"
+    "test-cov": "nyc --include lib/index.js --reporter=lcov --reporter=text ava"
   },
   "dependencies": {
     "react": ">= 16.8.1"

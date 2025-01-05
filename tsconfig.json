@@ -1,15 +1,20 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "./lib",
-    "target": "es2019",
-    "declaration": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "lib": ["es2019", "dom"],
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "skipLibCheck": true,
+    "strict": true,
     "esModuleInterop": true,
-    "jsx": "react"
+    "module": "CommonJS",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "outDir": "./lib",
+    "allowJs": true,
+    "declaration": true,
+    "declarationDir": "./lib",
+    "declarationMap": true,
   },
   "include": ["src"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "lib"]
 }

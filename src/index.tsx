@@ -49,8 +49,8 @@ export function PathProvider<T extends ReactNode>({ children }: PathProviderProp
     } else {
       const components: PathComponents = {
         pathname: 'pathname' in pathArgument ? pathArgument.pathname : path.pathname,
-        search: 'search' in pathArgument ? pathArgument.search : path.search,
-        hash: 'hash' in pathArgument ? pathArgument.hash : path.hash,
+        search: 'search' in pathArgument ? pathArgument.search ?? null : path.search,
+        hash: 'hash' in pathArgument ? pathArgument.hash ?? null : path.hash,
       }
       const fullpath = buildPath(components)
       setFullPath(setPathState, fullpath, options)
