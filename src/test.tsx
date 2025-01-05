@@ -1,5 +1,4 @@
 import React from 'react'
-import TestRenderer from 'react-test-renderer'
 import { PathProvider, usePath } from '../src/index'
 
 const currentPath = (): string => {

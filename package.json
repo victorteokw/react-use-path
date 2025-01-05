@@ -17,9 +17,11 @@
   "author": "Victor Teo (yeannylam@gmail.com)",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
-    "test-cov": "jest --coverage",
-    "build": "tsc"
+    "prepublish": "tsc",
+    "pretest": "tsc",
+    "pretest-cov": "tsc",
+    "test": "ava",
+    "test-cov": "nyc ava"
   },
   "dependencies": {
     "react": ">= 16.8.1"
@@ -27,11 +29,10 @@
   "devDependencies": {
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "jest": "^29.7.0",
+    "ava": "^6.2.0",
+    "nyc": "^17.1.0",
     "react": "^19",
     "react-dom": "^19",
-    "ts-jest": "^29.2.5",
-    "typescript": "^5.7.2",
-    "@types/jest": "^29.5.12"
+    "typescript": "^5"
   }
 }
