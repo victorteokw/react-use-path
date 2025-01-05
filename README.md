@@ -48,7 +48,7 @@ const search = path.search // get the search component
 const hash = path.hash // get the hash component
 ```
 
-Navigate to next path.
+Navigate to new path.
 
 ```ts
 const [path, setPath] = usePath()
@@ -73,5 +73,5 @@ MIT © [Victor Teo][license-url]
 [cov-url]: https://codecov.io/gh/victorteokw/react-use-path
 [license-image]: https://img.shields.io/github/license/victorteokw/react-use-path.svg?style=flat-square
 [license-url]: https://github.com/victorteokw/react-use-path/blob/master/LICENSE
-[pr-image]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
+[pr-image]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square&color=orange
 [pr-url]: https://github.com/victorteokw/react-use-path/blob/master/CONTRIBUTING.md
