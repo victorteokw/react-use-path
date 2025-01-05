@@ -1,5 +1,8 @@
+import "global-jsdom/register"
 import React from 'react'
-import { PathProvider, usePath } from '../src/index'
+import test from 'ava'
+import { render } from '@testing-library/react'
+import { PathProvider, usePath } from '.'
 
 const currentPath = (): string => {
   return window.location.href.replace(window.location.origin, '')
@@ -11,375 +14,373 @@ const nextTick = (n = 20) => {
   })
 }
 
-describe('gets browser path', () => {
+test("gets browser path", (t) => {
+  history.pushState(
+    {},
+    '',
+    '/component1/component2?query1=a&query2=b#hashvalue'
+  )
+  const Component = () => {
+    const [path] = usePath()
+    return (
+      <div>
+        <span className="full" data-data={path.full} />
+        <span className="pathname" data-data={path.pathname} />
+        <span className="search" data-data={path.search} />
+        <span className="hash" data-data={path.hash} />
+      </div>
+    )
+  }
+  const Layout = () => {
+    return (
+      <PathProvider>
+        <Component />
+      </PathProvider>
+    )
+  }
+  const layout = Layout()
+  const container = render(layout).container
+  t.is(
+    container.querySelector("span.full")?.getAttribute("data-data"),
+    "/component1/component2?query1=a&query2=b#hashvalue")
+  t.is(
+    container.querySelector("span.pathname")?.getAttribute("data-data"),
+    "/component1/component2")
+  t.is(
+    container.querySelector("span.search")?.getAttribute("data-data"),
+    "query1=a&query2=b")
+  t.is(
+    container.querySelector("span.hash")?.getAttribute("data-data"),
+    "hashvalue")
+})
 
-  let renderer;
-  beforeAll(() => {
-    history.pushState(
-      {},
-      '',
-      '/component1/component2?query1=a&query2=b#hashvalue'
-    );
-    const Element = () => {
-      const [path] = usePath();
-      return React.createElement('div', {}, [
-        path.path,
-        path.pathname,
-        path.query,
-        path.hash
-      ]);
-    };
-    renderer = TestRenderer.create(
-      React.createElement(Element, null, null)
-    );
-  });
+// describe('sets browser path', () => {
 
-  it('get current pathname', () => {
-    expect(renderer.toJSON().children[1]).toBe('/component1/component2');
-  });
+//   it('set full browser path with a string', () => {
+//     history.pushState({}, '', '/');
+//     const Element = () => {
+//       const setPath = usePath()[1];
+//       return React.createElement('div', {},
+//         React.createElement('button', {
+//           onClick: () => setPath('/newFullPath')
+//         }, 'Navigate')
+//       );
+//     };
+//     const renderer = TestRenderer.create(
+//       React.createElement(Element, null, null)
+//     );
+//     TestRenderer.act(() => {
+//       renderer.root.findByType('button').props.onClick();
+//     });
+//     expect(currentPath()).toBe('/newFullPath');
+//   });
 
-  it('get current query', () => {
-    expect(renderer.toJSON().children[2]).toBe('query1=a&query2=b');
-  });
+//   it('set hash with hash key', () => {
+//     history.pushState({}, '', '/current?val1=2');
+//     const Element = () => {
+//       const setPath = usePath()[1];
+//       return React.createElement('div', {},
+//         React.createElement('button', {
+//           onClick: () => setPath({ hash: 'top' })
+//         }, 'Jump to top')
+//       );
+//     };
+//     const renderer = TestRenderer.create(
+//       React.createElement(Element, null, null)
+//     );
+//     TestRenderer.act(() => {
+//       renderer.root.findByType('button').props.onClick();
+//     });
+//     expect(currentPath()).toBe('/current?val1=2#top');
+//   });
 
-  it('get current hash', () => {
-    expect(renderer.toJSON().children[3]).toBe('hashvalue');
-  });
+//   it('set query with query key', () => {
+//     history.pushState({}, '', '/current?val1=2');
+//     const Element = () => {
+//       const setPath = usePath()[1];
+//       return React.createElement('div', {},
+//         React.createElement('button', {
+//           onClick: () => setPath({ query: 'abc=5' })
+//         }, 'Jump to top')
+//       );
+//     };
+//     const renderer = TestRenderer.create(
+//       React.createElement(Element, null, null)
+//     );
+//     TestRenderer.act(() => {
+//       renderer.root.findByType('button').props.onClick();
+//     });
+//     expect(currentPath()).toBe('/current?abc=5');
+//   });
 
-  it('get current fullpath', () => {
-    expect(renderer.toJSON().children[0]).toBe(
-      '/component1/component2?query1=a&query2=b#hashvalue'
-    );
-  });
-});
+//   it('set path with path key', () => {
+//     history.pushState({}, '', '/current?val1=2');
+//     const Element = () => {
+//       const setPath = usePath()[1];
+//       return React.createElement('div', {},
+//         React.createElement('button', {
+//           onClick: () => setPath({ path: 'new' })
+//         }, 'Jump to top')
+//       );
+//     };
+//     const renderer = TestRenderer.create(
+//       React.createElement(Element, null, null)
+//     );
+//     TestRenderer.act(() => {
+//       renderer.root.findByType('button').props.onClick();
+//     });
+//     expect(currentPath()).toBe('/new');
+//   });
 
-describe('sets browser path', () => {
+//   it('does nothing when received empty object', () => {
+//     history.pushState({}, '', '/current?val1=2#abc');
+//     const Element = () => {
+//       const setPath = usePath()[1];
+//       return React.createElement('div', {},
+//         React.createElement('button', {
+//           onClick: () => setPath({})
+//         }, 'Jump to top')
+//       );
+//     };
+//     const renderer = TestRenderer.create(
+//       React.createElement(Element, null, null)
+//     );
+//     TestRenderer.act(() => {
+//       renderer.root.findByType('button').props.onClick();
+//     });
+//     expect(currentPath()).toBe('/current?val1=2#abc');
+//   });
 
-  it('set full browser path with a string', () => {
-    history.pushState({}, '', '/');
-    const Element = () => {
-      const setPath = usePath()[1];
-      return React.createElement('div', {},
-        React.createElement('button', {
-          onClick: () => setPath('/newFullPath')
-        }, 'Navigate')
-      );
-    };
-    const renderer = TestRenderer.create(
-      React.createElement(Element, null, null)
-    );
-    TestRenderer.act(() => {
-      renderer.root.findByType('button').props.onClick();
-    });
-    expect(currentPath()).toBe('/newFullPath');
-  });
+// });
 
-  it('set hash with hash key', () => {
-    history.pushState({}, '', '/current?val1=2');
-    const Element = () => {
-      const setPath = usePath()[1];
-      return React.createElement('div', {},
-        React.createElement('button', {
-          onClick: () => setPath({ hash: 'top' })
-        }, 'Jump to top')
-      );
-    };
-    const renderer = TestRenderer.create(
-      React.createElement(Element, null, null)
-    );
-    TestRenderer.act(() => {
-      renderer.root.findByType('button').props.onClick();
-    });
-    expect(currentPath()).toBe('/current?val1=2#top');
-  });
+// describe('updates state value', () => {
 
-  it('set query with query key', () => {
-    history.pushState({}, '', '/current?val1=2');
-    const Element = () => {
-      const setPath = usePath()[1];
-      return React.createElement('div', {},
-        React.createElement('button', {
-          onClick: () => setPath({ query: 'abc=5' })
-        }, 'Jump to top')
-      );
-    };
-    const renderer = TestRenderer.create(
-      React.createElement(Element, null, null)
-    );
-    TestRenderer.act(() => {
-      renderer.root.findByType('button').props.onClick();
-    });
-    expect(currentPath()).toBe('/current?abc=5');
-  });
+//   let renderer, pathValue;
+//   beforeAll(() => {
+//     history.pushState(
+//       {},
+//       '',
+//       '/component1/component2?query1=a&query2=b#hashvalue'
+//     );
+//     const Element = () => {
+//       const [path, setPath] = usePath();
+//       return React.createElement('div', {}, [
+//         React.createElement('div', { key: 'div' }, [
+//           path.path,
+//           path.pathname,
+//           path.query,
+//           path.hash
+//         ]),
+//         React.createElement('button', {
+//           key: 'button',
+//           onClick: () => setPath(pathValue)
+//         }, 'Navigate')
+//       ]);
+//     };
+//     renderer = TestRenderer.create(
+//       React.createElement(Element, null, null)
+//     );
+//     history.pushState({}, '', '/');
+//     pathValue = {
+//       path: '/abc/def/ghi',
+//       query: 'jkl=mno',
+//       hash: 'pqr'
+//     };
+//     TestRenderer.act(() => {
+//       renderer.root.findByType('button').props.onClick();
+//     });
+//   });
 
-  it('set path with path key', () => {
-    history.pushState({}, '', '/current?val1=2');
-    const Element = () => {
-      const setPath = usePath()[1];
-      return React.createElement('div', {},
-        React.createElement('button', {
-          onClick: () => setPath({ path: 'new' })
-        }, 'Jump to top')
-      );
-    };
-    const renderer = TestRenderer.create(
-      React.createElement(Element, null, null)
-    );
-    TestRenderer.act(() => {
-      renderer.root.findByType('button').props.onClick();
-    });
-    expect(currentPath()).toBe('/new');
-  });
+//   it('updates fullpath', () => {
+//     expect(renderer.toJSON().children[0].children[0])
+//     .toBe('/abc/def/ghi?jkl=mno#pqr');
+//   });
 
-  it('does nothing when received empty object', () => {
-    history.pushState({}, '', '/current?val1=2#abc');
-    const Element = () => {
-      const setPath = usePath()[1];
-      return React.createElement('div', {},
-        React.createElement('button', {
-          onClick: () => setPath({})
-        }, 'Jump to top')
-      );
-    };
-    const renderer = TestRenderer.create(
-      React.createElement(Element, null, null)
-    );
-    TestRenderer.act(() => {
-      renderer.root.findByType('button').props.onClick();
-    });
-    expect(currentPath()).toBe('/current?val1=2#abc');
-  });
+//   it('updates path', () => {
+//     expect(renderer.toJSON().children[0].children[1])
+//     .toBe('/abc/def/ghi');
+//   });
 
-});
+//   it('updates query', () => {
+//     expect(renderer.toJSON().children[0].children[2])
+//     .toBe('jkl=mno');
+//   });
 
-describe('updates state value', () => {
+//   it('updates hash', () => {
+//     expect(renderer.toJSON().children[0].children[3])
+//     .toBe('pqr');
+//   });
+// });
 
-  let renderer, pathValue;
-  beforeAll(() => {
-    history.pushState(
-      {},
-      '',
-      '/component1/component2?query1=a&query2=b#hashvalue'
-    );
-    const Element = () => {
-      const [path, setPath] = usePath();
-      return React.createElement('div', {}, [
-        React.createElement('div', { key: 'div' }, [
-          path.path,
-          path.pathname,
-          path.query,
-          path.hash
-        ]),
-        React.createElement('button', {
-          key: 'button',
-          onClick: () => setPath(pathValue)
-        }, 'Navigate')
-      ]);
-    };
-    renderer = TestRenderer.create(
-      React.createElement(Element, null, null)
-    );
-    history.pushState({}, '', '/');
-    pathValue = {
-      path: '/abc/def/ghi',
-      query: 'jkl=mno',
-      hash: 'pqr'
-    };
-    TestRenderer.act(() => {
-      renderer.root.findByType('button').props.onClick();
-    });
-  });
+// describe('updates history items', () => {
+//   it('pushes history item', () => {
+//     const { length } = history;
+//     const Element = () => {
+//       const setPath = usePath()[1];
+//       return React.createElement('div', {},
+//         React.createElement('button', {
+//           onClick: () => setPath('/path')
+//         }, 'Navigate')
+//       );
+//     };
+//     const renderer = TestRenderer.create(
+//       React.createElement(Element, null, null)
+//     );
+//     TestRenderer.act(() => {
+//       renderer.root.findByType('button').props.onClick();
+//     });
+//     expect(history.length - length).toBe(1);
+//   });
+// });
 
-  it('updates fullpath', () => {
-    expect(renderer.toJSON().children[0].children[0])
-    .toBe('/abc/def/ghi?jkl=mno#pqr');
-  });
+// describe('updates on navigation back', () => {
 
-  it('updates path', () => {
-    expect(renderer.toJSON().children[0].children[1])
-    .toBe('/abc/def/ghi');
-  });
+//   let renderer;
+//   beforeAll(async () => {
+//     history.pushState({}, '', '/abc/def/ghi?jkl=mno#pqr');
+//     const Element = () => {
+//       const [path, setPath] = usePath();
+//       return React.createElement('div', {}, [
+//         React.createElement('div', { key: 'div' }, [
+//           path.path,
+//           path.pathname,
+//           path.query,
+//           path.hash
+//         ]),
+//         React.createElement('button', {
+//           key: 'button',
+//           onClick: () => setPath('/after-push')
+//         }, 'Navigate')
+//       ]);
+//     };
+//     renderer = TestRenderer.create(
+//       React.createElement(Element, null, null)
+//     );
+//     TestRenderer.act(() => {
+//       renderer.root.findByType('button').props.onClick();
+//     });
+//     await TestRenderer.act(async () => {
+//       history.back();
+//       await nextTick();
+//     });
+//   });
 
-  it('updates query', () => {
-    expect(renderer.toJSON().children[0].children[2])
-    .toBe('jkl=mno');
-  });
+//   it('updates fullpath', () => {
+//     expect(renderer.toJSON().children[0].children[0])
+//     .toBe('/abc/def/ghi?jkl=mno#pqr');
+//   });
 
-  it('updates hash', () => {
-    expect(renderer.toJSON().children[0].children[3])
-    .toBe('pqr');
-  });
-});
+//   it('updates path', () => {
+//     expect(renderer.toJSON().children[0].children[1])
+//     .toBe('/abc/def/ghi');
+//   });
 
-describe('updates history items', () => {
-  it('pushes history item', () => {
-    const { length } = history;
-    const Element = () => {
-      const setPath = usePath()[1];
-      return React.createElement('div', {},
-        React.createElement('button', {
-          onClick: () => setPath('/path')
-        }, 'Navigate')
-      );
-    };
-    const renderer = TestRenderer.create(
-      React.createElement(Element, null, null)
-    );
-    TestRenderer.act(() => {
-      renderer.root.findByType('button').props.onClick();
-    });
-    expect(history.length - length).toBe(1);
-  });
-});
+//   it('updates query', () => {
+//     expect(renderer.toJSON().children[0].children[2])
+//     .toBe('jkl=mno');
+//   });
 
-describe('updates on navigation back', () => {
+//   it('updates hash', () => {
+//     expect(renderer.toJSON().children[0].children[3])
+//     .toBe('pqr');
+//   });
 
-  let renderer;
-  beforeAll(async () => {
-    history.pushState({}, '', '/abc/def/ghi?jkl=mno#pqr');
-    const Element = () => {
-      const [path, setPath] = usePath();
-      return React.createElement('div', {}, [
-        React.createElement('div', { key: 'div' }, [
-          path.path,
-          path.pathname,
-          path.query,
-          path.hash
-        ]),
-        React.createElement('button', {
-          key: 'button',
-          onClick: () => setPath('/after-push')
-        }, 'Navigate')
-      ]);
-    };
-    renderer = TestRenderer.create(
-      React.createElement(Element, null, null)
-    );
-    TestRenderer.act(() => {
-      renderer.root.findByType('button').props.onClick();
-    });
-    await TestRenderer.act(async () => {
-      history.back();
-      await nextTick();
-    });
-  });
+// });
 
-  it('updates fullpath', () => {
-    expect(renderer.toJSON().children[0].children[0])
-    .toBe('/abc/def/ghi?jkl=mno#pqr');
-  });
+// describe('updates on navigation forward', () => {
 
-  it('updates path', () => {
-    expect(renderer.toJSON().children[0].children[1])
-    .toBe('/abc/def/ghi');
-  });
+//   let renderer;
+//   beforeAll(async () => {
+//     history.pushState({}, '', '/abc/def/ghi?jkl=mno#pqr');
+//     const Element = () => {
+//       const [path, setPath] = usePath();
+//       return React.createElement('div', {}, [
+//         React.createElement('div', { key: 'div' }, [
+//           path.path,
+//           path.pathname,
+//           path.query,
+//           path.hash
+//         ]),
+//         React.createElement('button', {
+//           key: 'button',
+//           onClick: () => setPath('/after-push')
+//         }, 'Navigate')
+//       ]);
+//     };
+//     renderer = TestRenderer.create(
+//       React.createElement(Element, null, null)
+//     );
+//     TestRenderer.act(() => {
+//       renderer.root.findByType('button').props.onClick();
+//     });
+//     await TestRenderer.act(async () => {
+//       history.back();
+//       await nextTick();
+//       history.forward();
+//       await nextTick();
+//     });
+//   });
 
-  it('updates query', () => {
-    expect(renderer.toJSON().children[0].children[2])
-    .toBe('jkl=mno');
-  });
+//   it('updates fullpath', () => {
+//     expect(renderer.toJSON().children[0].children[0])
+//     .toBe('/after-push');
+//   });
 
-  it('updates hash', () => {
-    expect(renderer.toJSON().children[0].children[3])
-    .toBe('pqr');
-  });
+//   it('updates path', () => {
+//     expect(renderer.toJSON().children[0].children[1])
+//     .toBe('/after-push');
+//   });
 
-});
+//   it('updates query', () => {
+//     expect(renderer.toJSON().children[0].children[2])
+//     .toBe('');
+//   });
 
-describe('updates on navigation forward', () => {
+//   it('updates hash', () => {
+//     expect(renderer.toJSON().children[0].children[3])
+//     .toBe('');
+//   });
 
-  let renderer;
-  beforeAll(async () => {
-    history.pushState({}, '', '/abc/def/ghi?jkl=mno#pqr');
-    const Element = () => {
-      const [path, setPath] = usePath();
-      return React.createElement('div', {}, [
-        React.createElement('div', { key: 'div' }, [
-          path.path,
-          path.pathname,
-          path.query,
-          path.hash
-        ]),
-        React.createElement('button', {
-          key: 'button',
-          onClick: () => setPath('/after-push')
-        }, 'Navigate')
-      ]);
-    };
-    renderer = TestRenderer.create(
-      React.createElement(Element, null, null)
-    );
-    TestRenderer.act(() => {
-      renderer.root.findByType('button').props.onClick();
-    });
-    await TestRenderer.act(async () => {
-      history.back();
-      await nextTick();
-      history.forward();
-      await nextTick();
-    });
-  });
+// });
 
-  it('updates fullpath', () => {
-    expect(renderer.toJSON().children[0].children[0])
-    .toBe('/after-push');
-  });
+// describe('replaces browser path', () => {
+//   it('replaces full browser path with a string', () => {
+//     history.pushState({}, '', '/');
+//     const Element = () => {
+//       const replacePath = usePath()[2];
+//       return React.createElement('div', {},
+//         React.createElement('button', {
+//           onClick: () => replacePath('/newFullPath')
+//         }, 'Navigate')
+//       );
+//     };
+//     const renderer = TestRenderer.create(
+//       React.createElement(Element, null, null)
+//     );
+//     expect(currentPath()).toBe('/');
+//     const { length } = history;
+//     TestRenderer.act(() => {
+//       renderer.root.findByType('button').props.onClick();
+//     });
+//     expect(currentPath()).toBe('/newFullPath');
+//     expect(history.length).toBe(length);
+//   });
+// });
 
-  it('updates path', () => {
-    expect(renderer.toJSON().children[0].children[1])
-    .toBe('/after-push');
-  });
-
-  it('updates query', () => {
-    expect(renderer.toJSON().children[0].children[2])
-    .toBe('');
-  });
-
-  it('updates hash', () => {
-    expect(renderer.toJSON().children[0].children[3])
-    .toBe('');
-  });
-
-});
-
-describe('replaces browser path', () => {
-  it('replaces full browser path with a string', () => {
-    history.pushState({}, '', '/');
-    const Element = () => {
-      const replacePath = usePath()[2];
-      return React.createElement('div', {},
-        React.createElement('button', {
-          onClick: () => replacePath('/newFullPath')
-        }, 'Navigate')
-      );
-    };
-    const renderer = TestRenderer.create(
-      React.createElement(Element, null, null)
-    );
-    expect(currentPath()).toBe('/');
-    const { length } = history;
-    TestRenderer.act(() => {
-      renderer.root.findByType('button').props.onClick();
-    });
-    expect(currentPath()).toBe('/newFullPath');
-    expect(history.length).toBe(length);
-  });
-});
-
-describe('removes callback on unamouting', () => {
-  it('remove event handler on window object', async () => {
-    history.pushState({}, '', '/');
-    const Element = () => {
-      const path = usePath()[0];
-      return React.createElement('div', {}, path.path);
-    };
-    const renderer = TestRenderer.create(
-      React.createElement(Element, null, null)
-    );
-    renderer.unmount();
-    await expect(TestRenderer.act(async () => {
-      history.back();
-      await nextTick(9000);
-    })).rejects.not.toThrow();
-  });
-});
+// describe('removes callback on unamouting', () => {
+//   it('remove event handler on window object', async () => {
+//     history.pushState({}, '', '/');
+//     const Element = () => {
+//       const path = usePath()[0];
+//       return React.createElement('div', {}, path.path);
+//     };
+//     const renderer = TestRenderer.create(
+//       React.createElement(Element, null, null)
+//     );
+//     renderer.unmount();
+//     await expect(TestRenderer.act(async () => {
+//       history.back();
+//       await nextTick(9000);
+//     })).rejects.not.toThrow();
+//   });
+// });

@@ -27,12 +27,20 @@
     "react": ">= 16.8.1"
   },
   "devDependencies": {
+    "@testing-library/react": "^16.1.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "ava": "^6.2.0",
+    "global-jsdom": "^25.0.0",
+    "jsdom": "^25.0.1",
     "nyc": "^17.1.0",
     "react": "^19",
     "react-dom": "^19",
     "typescript": "^5"
+  },
+  "ava": {
+    "files": [
+      "lib/test.js"
+    ]
   }
 }

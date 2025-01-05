@@ -1,1 +1,1 @@
-export {};
+import "global-jsdom/register";
