@@ -8,19 +8,22 @@ react-use-path
 [![License][license-image]][license-url]
 [![PR Welcome][pr-image]][pr-url]
 
-The tiniest react router implemented with hooks.
+The tiniest react URL path navigator.
 
 ## Introduction
 
-The React brand new feature hooks changes the way how we write and organize
-components. Writing an app fully with functional components becomes possible.
-The first thing I'd like to try is to replace the heavy react-router, and create
-a simple yet powerful functional router.
+This package is designed for SPAs that manages the URLs and routes internally.
+The component based routers are bad in the React world. Do a `console.log` in
+a component wrapped under a `<Route>`, you will find the log is printed even
+it shouldn't be rendered. The reason we use `map` for list, use ternary
+operator for condition, is that we cannot wrap them into components. Natural
+javaScript control flows should be used. The correct way to do routing is with
+functions and `switch`.
 
-Finally the API really stunned me.
+`react-use-path` has a fairly simple API, which is just one line.
 
-```javaScript
-const [path, setPath] = usePath();
+```ts
+const [path, setPath] = usePath()
 ```
 
 It can't be more simple yet powerful. It makes the coding style of an app looks
@@ -34,7 +37,7 @@ Install this package with `npm`.
 npm i react-use-path -s
 ```
 
-## Usage
+## Setup
 
 Use javaScript language level switch.
 

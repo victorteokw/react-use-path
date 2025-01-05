@@ -1,41 +1,37 @@
 {
-    "name": "react-use-path",
-    "version": "0.3.2",
-    "description": "The tiniest react router implemented with hooks.",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/victorteokw/react-use-path"
-    },
-    "author": "Victor Teo (yeannylam@gmail.com)",
-    "license": "MIT",
-    "main": "index.js",
-    "files": [
-        "index.js",
-        "index.d.ts",
-        "lib/index.js",
-        "lib/index.d.ts"
-    ],
-    "scripts": {
-        "test": "jest",
-        "test-cov": "jest --coverage",
-        "build": "tsc"
-    },
-    "peerDependencies": {
-        "react": "^18.0.0"
-    },
-    "devDependencies": {
-        "@types/react": "^18.0.0",
-        "@types/react-dom": "^18.0.0",
-        "@types/react-test-renderer": "^18.0.0",
-        "jest": "^29.7.0",
-        "react": "^18.0.0",
-        "react-dom": "^18.0.0",
-        "react-test-renderer": "^18.0.0",
-        "ts-jest": "^29.1.2",
-        "ts-node": "^10.9.2",
-        "typescript": "^5.4.5"
-    },
-    "dependencies": {
-        "@types/jest": "^29.5.12"
-    }
+  "name": "react-use-path",
+  "version": "1.0.0",
+  "description": "The tiniest react URL path navigator.",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/index.js",
+    "lib/index.d.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/victorteokw/react-use-path"
+  },
+  "author": "Victor Teo (yeannylam@gmail.com)",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest",
+    "test-cov": "jest --coverage",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "react": ">= 16.8.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "jest": "^29.7.0",
+    "react": "^19",
+    "react-dom": "^19",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.7.2",
+    "@types/jest": "^29.5.12"
+  }
 }
